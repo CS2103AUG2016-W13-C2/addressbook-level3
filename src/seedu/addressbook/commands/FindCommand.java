@@ -13,7 +13,7 @@ public class FindCommand extends Command {
     public static final String COMMAND_WORD = "find";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ":\n" + "Finds all persons whose names contain any of "
-            + "the specified keywords (case-sensitive) and displays them as a list with index numbers.\n\t"
+            + "the specified keywords (not case-sensitive) and displays them as a list with index numbers.\n\t"
             + "Parameters: KEYWORD [MORE_KEYWORDS]...\n\t"
             + "Example: " + COMMAND_WORD + " alice bob charlie";
 
@@ -37,7 +37,7 @@ public class FindCommand extends Command {
     }
 
     /**
-     * Retrieve all persons in the address book whose names contain some of the specified keywords.
+     * Retrieve all persons in the address book whose names contain some of the specified keywords and is not case sensitive
      *
      * @param keywords for searching
      * @return list of persons found
@@ -46,11 +46,26 @@ public class FindCommand extends Command {
         final List<ReadOnlyPerson> matchedPersons = new ArrayList<>();
         for (ReadOnlyPerson person : addressBook.getAllPersons()) {
             final Set<String> wordsInName = new HashSet<>(person.getName().getWordsInName());
-            if (!Collections.disjoint(wordsInName, keywords)) {
+            if (!Collections.disjoint(convertLowerCase(wordsInName), convertLowerCase(keywords))) {
                 matchedPersons.add(person);
             }
         }
         return matchedPersons;
+    }
+    
+    /**
+     * Converts string to lowercase
+     * 
+     * @param Set<String>
+     * @return set of string converted to lowercase
+     */
+    private Set<String> convertLowerCase(Set<String> original) {
+        Set<String> lowerCaseWords = new HashSet<>();
+        Iterator<String> originalIterator = original.iterator();
+        while (originalIterator.hasNext()) {
+            lowerCaseWords.add(originalIterator.next().toLowerCase());
+        }
+        return lowerCaseWords;
     }
 
 }
