@@ -18,6 +18,9 @@ public class Parser {
 
     public static final Pattern KEYWORDS_ARGS_FORMAT =
             Pattern.compile("(?<keywords>\\S+(?:\\s+\\S+)*)"); // one or more keywords separated by whitespace
+    
+    public static final Pattern NUMBER_ARGS_FORMAT = 
+            Pattern.compile("\\d+");
 
     public static final Pattern PERSON_DATA_ARGS_FORMAT = // '/' forward slashes are reserved for delimiter prefixes
             Pattern.compile("(?<name>[^/]+)"
@@ -82,6 +85,9 @@ public class Parser {
 
             case ExitCommand.COMMAND_WORD:
                 return new ExitCommand();
+            
+            case SearchCommand.COMMAND_WORD:
+                return prepareSearch(arguments);
 
             case HelpCommand.COMMAND_WORD: // Fallthrough
             default:
@@ -227,6 +233,13 @@ public class Parser {
         final Set<String> keywordSet = new HashSet<>(Arrays.asList(keywords));
         return new FindCommand(keywordSet);
     }
-
+    private Command prepareSearch(String args) {
+        final Matcher matcher = NUMBER_ARGS_FORMAT.matcher(args.trim());
+        if (!matcher.matches()) {
+            return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    SearchCommand.MESSAGE_USAGE));
+        }
+        return new SearchCommand(args.trim());
+        }
 
 }
