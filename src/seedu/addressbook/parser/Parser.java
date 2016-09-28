@@ -20,7 +20,7 @@ public class Parser {
             Pattern.compile("(?<keywords>\\S+(?:\\s+\\S+)*)"); // one or more keywords separated by whitespace
     
     public static final Pattern NUMBER_ARGS_FORMAT = 
-            Pattern.compile("\\d+");
+            Pattern.compile("(?<phone>[^/]+)");
 
     public static final Pattern PERSON_DATA_ARGS_FORMAT = // '/' forward slashes are reserved for delimiter prefixes
             Pattern.compile("(?<name>[^/]+)"
@@ -284,7 +284,7 @@ public class Parser {
             return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     SearchCommand.MESSAGE_USAGE));
         }
-        return new SearchCommand(args.trim());
+        return new SearchCommand(matcher.group("phone"));
     }
 
 }
