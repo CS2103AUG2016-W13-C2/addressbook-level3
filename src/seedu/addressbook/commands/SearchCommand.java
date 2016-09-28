@@ -43,7 +43,7 @@ public class SearchCommand extends Command{
     private ArrayList<ReadOnlyPerson> getPersonsWithSearchedMobileNo(String mobile){
         final ArrayList<ReadOnlyPerson> matchedPerson = new ArrayList<ReadOnlyPerson>();
         for (ReadOnlyPerson person : addressBook.getAllPersons()){
-            if(mobile.equals(person.getPhone())){
+            if(mobile.equals(person.getPhone().toString())){
                 matchedPerson.add(person);
                 }
             }
